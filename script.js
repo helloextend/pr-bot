@@ -57,3 +57,16 @@ function check_labels(labels) {
     }
     return false
 }
+
+function parseJira(pullRequest) {
+    var s = "BF-18 abc-123 X-88 ABCDEFGHIJKL-999 abc XY-Z-333 abcDEF-33 ABC-1"
+    s = reverse(s)
+    var m = s.match(jira_matcher);
+
+// Also need to reverse all the results!
+    for (var i = 0; i < m.length; i++) {
+        m[i] = reverse(m[i])
+    }
+    m.reverse()
+    console.log(m)
+}
