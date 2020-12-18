@@ -18,11 +18,10 @@ async function main () {
     const octokit = new Octokit({
         auth: `token ${token}`,
         userAgent: '@extend/mergebot'
-    });
+    })
 
     if (debug) {
-        console.log(util.inspect(context.event.pull_request.labels, {showHidden: false, depth: null}))
-        //console.log(util.inspect(context.event.pull_request, {showHidden: false, depth: null}))
+        log(context.event.pull_request.lables)
     }
 
     if (!checkLabels(pullRequest.labels)) {
@@ -31,7 +30,7 @@ async function main () {
     }
 
     const commit = `[${jiraIssue}] - ${pullRequestTitle} #${pullRequestNumber}`
-    console.log(commit)
+
     const mergeParams = {
         owner: pullRequest.base.repo.owner.login,
         repo: pullRequest.base.repo.name,
@@ -41,16 +40,16 @@ async function main () {
         sha,
         merge_method: 'squash'
     }
-    // const { status, data } = await octokit.pulls.merge(mergeParams)
-    // console.log(util.inspect(data, {showHidden: false, depth: null}))
-    // if ( status === 200 ) {
-    //     return true
-    // } else {
-    //     return false
-    // }
+    const { status, data } = await octokit.pulls.merge(mergeParams)
+    log(data)
+    return status === 200;
 }
 
 main()
+
+function log(toLog) {
+    console.log(util.inspect(toLog, {showHidden: false, depth: null}))
+}
 
 function checkLabels(labels) {
     let flag = false
@@ -62,17 +61,4 @@ function checkLabels(labels) {
         })
     }
     return flag
-}
-
-function parseJira(pullRequest) {
-    var s = "BF-18 abc-123 X-88 ABCDEFGHIJKL-999 abc XY-Z-333 abcDEF-33 ABC-1"
-    s = reverse(s)
-    var m = s.match(jira_matcher);
-
-// Also need to reverse all the results!
-    for (var i = 0; i < m.length; i++) {
-        m[i] = reverse(m[i])
-    }
-    m.reverse()
-    console.log(m)
 }
