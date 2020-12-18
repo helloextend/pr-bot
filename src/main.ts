@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-const { Octokit } = require("@octokit/rest");
+const { Octokit } = require("@octokit/rest")
 import { inspect } from 'util'
 
 async function run(): Promise<void> {
@@ -15,7 +15,7 @@ async function run(): Promise<void> {
     const pullRequest = context.event.pull_request
     const {
       head: { sha }
-    } = pullRequest;
+    } = pullRequest
 
     const octokit = new Octokit()({
       auth: `token ${token}`,
