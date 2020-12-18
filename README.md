@@ -1,10 +1,10 @@
-# Tool Info
+# Tool Details
 
-This is a github action that can be used in any repo to allow merges of a PR via addition of a label and standadized the final squash merge commit message.
+This is a github action that can be used in any repo that enforces a JIRA ticket in the title of the PR and uses that to standardize the squash commit message on merge
 
-It currently requires a user to have a valid JIRA ticket in their title
-
-   
+## ToDo
+- Get testing setup and tests written
+    
 ## Bonus
 - Trigger circle ci test workflow
 - Try getting this working as a consumable action from node-core. Much like `uses: helloextend/pr-bot@master`
