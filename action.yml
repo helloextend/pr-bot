@@ -4,7 +4,7 @@ author: 'Extend'
 inputs:
   context:
     required: true
-    description: 'The github context passed as ${{ toJson(github) }}'
+    description: 'The github context passed as toJson(github)'
   debug:
     required: false
     description: 'Add debug logs to action'
