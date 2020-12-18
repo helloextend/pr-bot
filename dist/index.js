@@ -43,9 +43,8 @@ const util_1 = __webpack_require__(669);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const contextVar = getVar('GITHUB_CONTEXT');
-            const context = JSON.parse(contextVar);
-            const debug = getVar('DEBUG');
+            const context = JSON.parse(core.getInput('context'));
+            const debug = core.getInput('debug');
             if (debug) {
                 log(context.event);
                 log(context.event.pull_request.lables);

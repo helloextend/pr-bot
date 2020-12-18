@@ -4,9 +4,8 @@ import { inspect } from 'util'
 
 async function run(): Promise<void> {
   try {
-    const contextVar = getVar('GITHUB_CONTEXT')
-    const context = JSON.parse(contextVar)
-    const debug = getVar('DEBUG')
+    const context = JSON.parse(core.getInput('context'))
+    const debug = core.getInput('debug')
     if (debug) {
       log(context.event)
       log(context.event.pull_request.lables)

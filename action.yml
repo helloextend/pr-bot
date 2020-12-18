@@ -5,6 +5,10 @@ inputs:
   context:
     required: true
     description: 'The github context passed as ${{ toJson(github) }}'
+  debug:
+    required: false
+    description: 'Add debug logs to action'
+    default: 'false'
   label: # change this
     required: false
     description: 'Label Name to check'
