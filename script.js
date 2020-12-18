@@ -29,7 +29,7 @@ async function main () {
 
     const commit = `[${jiraIssue}] - ${pullRequest.title} #${pullRequest.number}`
 
-    const { status, data } = mergePr(octokit, pullRequest, commit, sha)
+    const { status, data } = await mergePr(octokit, pullRequest, commit, sha)
     log(data)
     return status === 200
 }
