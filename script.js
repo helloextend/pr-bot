@@ -30,6 +30,15 @@ async function main () {
 
     const commit = `[${jiraIssue}] - ${pullRequest.title} #${pullRequest.number}`
 
+    const { status: reviewsStatus, data: reviewsData} = await octokit.pulls.listReviews({
+        owner: pullRequest.base.repo.owner.login,
+        repo: pullRequest.base.repo.name,
+        pull_number: pullRequest.number
+    }).catch(error => {
+        log(error)
+        core.setFailed(error.message)
+    })
+    log(reviewsData)
     const { status: labelStatus, data: labelData } = await octokit.issues.addLabels({
         owner: pullRequest.base.repo.owner.login,
         repo: pullRequest.base.repo.name,
@@ -39,13 +48,13 @@ async function main () {
         log(error)
         core.setFailed(error.message)
     })
-    const { status, data } = await mergePr(octokit, pullRequest, commit, sha)
-        .catch(error => {
-            log(error)
-            core.setFailed(error.message)
-        })
-    log(data)
-    return status === 200
+    // const { status, data } = await mergePr(octokit, pullRequest, commit, sha)
+    //     .catch(error => {
+    //         log(error)
+    //         core.setFailed(error.message)
+    //     })
+    // log(data)
+    // return status === 200
 }
 
 main()
