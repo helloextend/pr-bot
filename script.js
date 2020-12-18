@@ -1,4 +1,5 @@
 const util = require('util')
+const { Octokit } = require("@octokit/rest");
 
 async function main () {
     const context = JSON.parse(process.env.GITHUB_CONTEXT)
