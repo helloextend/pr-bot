@@ -2,6 +2,9 @@ name: 'MergeIt'
 description: 'Merge a thing'
 author: 'Extend'
 inputs:
+  context:
+    required: true
+    description: 'The github context passed as ${{ toJson(github) }}'
   label: # change this
     required: false
     description: 'Label Name to check'
