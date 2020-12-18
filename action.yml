@@ -1,0 +1,11 @@
+name: 'MergeIt'
+description: 'Merge a thing'
+author: 'Extend'
+inputs:
+  label: # change this
+    required: false
+    description: 'Label Name to check'
+    default: 'MergeMe'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
