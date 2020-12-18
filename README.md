@@ -26,4 +26,3 @@ https://github.com/atlassian/gajira-find-issue-key
 
 ###GitHub API
 https://github.com/octokit
-
