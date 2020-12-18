@@ -61,7 +61,7 @@ function run() {
                 console.log("No labels on PR, nothing to do...");
                 process.exit(0);
             }
-            const commit = `[${jiraIssue}] - ${pullRequest.title} #${pullRequest.number}`;
+            const commit = `${pullRequest.title} #${pullRequest.number}`;
             mergePr(octokit, pullRequest, commit, sha)
                 .then(mergeResponse => {
                 if (!mergeResponse)
