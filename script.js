@@ -23,18 +23,21 @@ async function main () {
         userAgent: '@extend/mergebot'
     })
 
-    if (!checkLabels(pullRequest.labels)) {
-        console.log("No labels on PR, nothing to do...")
-        return false
-    }
+    // if (!checkLabels(pullRequest.labels)) {
+    //     console.log("No labels on PR, nothing to do...")
+    //     return false
+    // }
 
     const commit = `[${jiraIssue}] - ${pullRequest.title} #${pullRequest.number}`
 
-    octokit.issues.addLabels({
+    const { status: labelStatus, data: labelData } = await octokit.issues.addLabels({
         owner: pullRequest.base.repo.owner.login,
         repo: pullRequest.base.repo.name,
         issue_number: pullRequest.number,
         labels: 'MergeMe',
+    }).catch(error => {
+        log(error)
+        core.setFailed(error.message)
     })
     const { status, data } = await mergePr(octokit, pullRequest, commit, sha)
         .catch(error => {
