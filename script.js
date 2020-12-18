@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 const util = require('util')
-const { Octokit } = require("@octokit/rest");
+const { Octokit } = require("@octokit/rest")
+const core = require('@actions/core')
 
 async function main () {
     const context = JSON.parse(process.env.GITHUB_CONTEXT)
@@ -32,7 +33,7 @@ async function main () {
     const { status, data } = await mergePr(octokit, pullRequest, commit, sha)
         .catch(error => {
             log(error)
-            process.exit(1)
+            core.setFailed(error.message)
         })
     log(data)
     return status === 200
