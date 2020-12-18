@@ -2,15 +2,6 @@ name: 'MergeIt'
 description: 'Merge a thing'
 author: 'Extend'
 inputs:
-  jiraUrl:
-    required: true
-    description: 'Your JIRA url'
-  jiraEmail:
-    required: true
-    description: 'Jira Email'
-  jiraApiToken:
-    required: true
-    description: 'API Token'
   context:
     required: true
     description: 'The github context passed as toJson(github)'
@@ -23,20 +14,5 @@ inputs:
     description: 'Label Name to check'
     default: 'MergeMe'
 runs:
-  using: "composite"
-  steps:
-    - uses: actions/setup-node@v1
-    - name: Log in to Jira
-      uses: atlassian/gajira-login@master
-      env:
-        JIRA_BASE_URL: ${{ inputs.jiraUrl }}
-        JIRA_USER_EMAIL: ${{ inputs.jiraEmail }}
-        JIRA_API_TOKEN: ${{ inputs.jiraApiToken }}
-    - name: Find Jira Issue in branch name
-      id: findIssue
-      uses: atlassian/gajira-find-issue-key@master
-      with:
-        from: branch
-        string: "${{ github.head_ref }}"
-    - name: Validate Jira Issue
-      run: test -n "${{ steps.findIssue.outputs.issue }}"
+  using: "node12"
+  main: 'dist/index.js'
