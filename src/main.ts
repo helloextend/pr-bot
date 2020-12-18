@@ -27,7 +27,7 @@ async function run(): Promise<void> {
       process.exit(0)
     }
 
-    const commit = `[${jiraIssue}] - ${pullRequest.title} #${pullRequest.number}`
+    const commit = `${pullRequest.title} #${pullRequest.number}`
 
     mergePr(octokit, pullRequest, commit, sha)
       .then(mergeResponse => {
