@@ -2,7 +2,7 @@ const util = require('util')
 
 async function main () {
     const context = JSON.parse(process.env.GITHUB_CONTEXT)
-    const pull_requset = context.event.pull_request
+    const pullRequest = context.event.pull_request
     const {
         head: { sha }
     } = pullRequest;
