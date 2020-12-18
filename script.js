@@ -25,7 +25,7 @@ async function main () {
         //console.log(util.inspect(context.event.pull_request, {showHidden: false, depth: null}))
     }
 
-    if (!check_labels(pullRequest)) {
+    if (!check_labels(pullRequest.labels)) {
         console.log("No labels on PR, nothing to do...")
         return false
     }
