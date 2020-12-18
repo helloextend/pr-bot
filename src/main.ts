@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-const { Octokit } = require("@octokit/rest")
+import { Octokit } from "@octokit/rest"
 import { inspect } from 'util'
 
 async function run(): Promise<void> {
@@ -18,7 +18,7 @@ async function run(): Promise<void> {
     } = pullRequest
 
     log('1')
-    const octokit = new Octokit()({
+    const octokit = new Octokit({
       auth: `token ${token}`,
       userAgent: '@extend/mergebot'
     })
@@ -30,7 +30,7 @@ async function run(): Promise<void> {
     log('2')
     const commit = `[${jiraIssue}] - ${pullRequest.title} #${pullRequest.number}`
 
-    const { status: reviewsStatus, data: reviewsData} = await octokit.pulls.listReviews({
+    const listResponse = await octokit.pulls.listReviews({
       owner: pullRequest.base.repo.owner.login,
       repo: pullRequest.base.repo.name,
       pull_number: pullRequest.number
@@ -38,8 +38,8 @@ async function run(): Promise<void> {
       log(error)
       core.setFailed(error.message)
     })
-    log(reviewsData)
-    const { status: labelStatus, data: labelData } = await octokit.issues.addLabels({
+    log(listResponse)
+    const labelResponse = await octokit.issues.addLabels({
       owner: pullRequest.base.repo.owner.login,
       repo: pullRequest.base.repo.name,
       issue_number: pullRequest.number,
@@ -48,6 +48,7 @@ async function run(): Promise<void> {
       log(error)
       core.setFailed(error.message)
     })
+    log(labelResponse)
     // const { status, data } = await mergePr(octokit, pullRequest, commit, sha)
     //     .catch(error => {
     //         log(error)
@@ -61,6 +62,21 @@ async function run(): Promise<void> {
 }
 
 run()
+
+
+// async function mergePr(octokit, pullRequest, commit_title, sha) {
+//   const mergeParams = {
+//     owner: pullRequest.base.repo.owner.login,
+//     repo: pullRequest.base.repo.name,
+//     pull_number: pullRequest.number,
+//     commit_title,
+//     commit_message: "",
+//     sha,
+//     merge_method: 'squash'
+//   }
+//   const { status, data } = await octokit.pulls.merge(mergeParams)
+//   return { status, data }
+// }
 
 function log(toLog: any) {
   console.log(inspect(toLog, {showHidden: false, depth: null}))
