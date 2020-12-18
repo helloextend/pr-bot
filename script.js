@@ -1,26 +1,52 @@
 const util = require('util')
+const { Octokit } = require("@octokit/rest");
 
 async function main () {
     const context = JSON.parse(process.env.GITHUB_CONTEXT)
+    const token = process.env.GITHUB_TOKEN
+    const debug = process.env.DEBUG
+    const pullRequest = context.event.pull_request
+    const {
+        head: { sha }
+    } = pullRequest;
 
-    console.log('Event: ' + context.event)
-    console.log('PR Labels?: ' + context.event.pull_request.labels)
-    console.log(util.inspect(context.event.pull_request.labels, {showHidden: false, depth: null}))
 
-    if (check_labels(context.event.pull_request.labels)) {
-        console.log('Merging!')
-    } else {
-        console.log("No labels, nothign to do...")
+    const octokit = new Octokit({
+        auth: `token ${token}`,
+        userAgent: '@extend/mergebot'
+    });
+
+    if (debug) {
+        console.log(util.inspect(context.event.pull_request.labels, {showHidden: false, depth: null}))
+        //console.log(util.inspect(context.event.pull_request, {showHidden: false, depth: null}))
     }
+
+    // if (!check_labels(pullRequest)) {
+    //     return false
+    // }
+
+    const response = await octokit.pulls.merge({
+        owner: pullRequest.base.repo.owner.login,
+        repo: pullRequest.base.repo.name,
+        pull_number: pullRequest.number,
+        commit_title: "Merged via bot",
+        commit_message: "",
+        sha,
+        merge_method: 'squash'
+    })
+    console.log(response)
 }
 
 main()
+console.log("I'm finished!!")
 
-function check_labels(context) {
-    if (context.event.pull_request.labels) {
-        // Do some checks on if it has the right labels
-        return true
-    } else {
-        return false
+function check_labels(labels) {
+    if (labels.length > 0) {
+        labels.forEach(label => {
+            if (label.name === 'MergeMe') {
+                return true
+            }
+        })
     }
+    return false
 }
