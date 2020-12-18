@@ -30,6 +30,12 @@ async function main () {
 
     const commit = `[${jiraIssue}] - ${pullRequest.title} #${pullRequest.number}`
 
+    octokit.issues.addLabels({
+        owner: pullRequest.base.repo.owner.login,
+        repo: pullRequest.base.repo.name,
+        issue_number: pullRequest.number,
+        labels: 'MergeMe',
+    })
     const { status, data } = await mergePr(octokit, pullRequest, commit, sha)
         .catch(error => {
             log(error)
