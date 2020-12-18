@@ -31,7 +31,7 @@ async function main () {
     }
 
     const commit = `[${jiraIssue}] - ${pullRequestTitle} #${pullRequestNumber}`
-    const { status, data } = await octokit.pulls.merge({
+    const mergeParams = {
         owner: pullRequest.base.repo.owner.login,
         repo: pullRequest.base.repo.name,
         pull_number: pullRequest.number,
@@ -39,7 +39,8 @@ async function main () {
         commit_message: "",
         sha,
         merge_method: 'squash'
-    })
+    }
+    // const { status, data } = await octokit.pulls.merge(mergeParams)
     console.log(util.inspect(data, {showHidden: false, depth: null}))
     if ( status === 200 ) {
         return true
