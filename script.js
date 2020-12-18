@@ -2,13 +2,19 @@ const util = require('util')
 const { Octokit } = require("@octokit/rest");
 
 async function main () {
-    const octokit = new Octokit()
     const context = JSON.parse(process.env.GITHUB_CONTEXT)
+    const token = process.env.GITHUB_TOKEN
     const debug = process.env.DEBUG
     const pullRequest = context.event.pull_request
     const {
         head: { sha }
     } = pullRequest;
+
+
+    const octokit = new Octokit({
+        auth: `token ${token}`,
+        userAgent: '@extend/mergebot'
+    });
 
     if (debug) {
         console.log(util.inspect(context.event.pull_request.labels, {showHidden: false, depth: null}))
