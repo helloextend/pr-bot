@@ -25,7 +25,7 @@ async function main () {
         return false
     }
 
-    await octokit.pulls.merge({
+    const response = await octokit.pulls.merge({
         owner: pullRequest.base.repo.owner.login,
         repo: pullRequest.base.repo.name,
         pull_number: pullRequest.number,
@@ -34,6 +34,7 @@ async function main () {
         sha,
         merge_method: 'squash'
     })
+    console.log(response)
 }
 
 main()
