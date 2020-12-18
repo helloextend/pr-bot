@@ -25,7 +25,7 @@ async function main () {
         //console.log(util.inspect(context.event.pull_request, {showHidden: false, depth: null}))
     }
 
-    if (!check_labels(pullRequest.labels)) {
+    if (!checkLabels(pullRequest.labels)) {
         console.log("No labels on PR, nothing to do...")
         return false
     }
@@ -51,14 +51,17 @@ async function main () {
 
 main()
 
-function check_labels(labels) {
+function checkLabels(labels) {
     if (labels.length > 0) {
         labels.forEach(label => {
+            console.log(label.name)
             if (label.name === 'MergeMe') {
+                console.log('returning true')
                 return true
             }
         })
     }
+    console.log('returning false')
     return false
 }
 
