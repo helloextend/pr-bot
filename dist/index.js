@@ -62,32 +62,32 @@ function run() {
                 // return false
             }
             const commit = `[${jiraIssue}] - ${pullRequest.title} #${pullRequest.number}`;
-            const listResponse = yield octokit.pulls.listReviews({
-                owner: pullRequest.base.repo.owner.login,
-                repo: pullRequest.base.repo.name,
-                pull_number: pullRequest.number
-            }).catch((error) => {
+            // const listResponse = await octokit.pulls.listReviews({
+            //   owner: pullRequest.base.repo.owner.login,
+            //   repo: pullRequest.base.repo.name,
+            //   pull_number: pullRequest.number
+            // }).catch((error: any) => {
+            //   log(error)
+            //   core.setFailed(error.message)
+            // })
+            // log(listResponse)
+            // const labelResponse = await octokit.issues.addLabels({
+            //   owner: pullRequest.base.repo.owner.login,
+            //   repo: pullRequest.base.repo.name,
+            //   issue_number: pullRequest.number,
+            //   labels: ['MergeMe'],
+            // }).catch((error: any) => {
+            //   log(error)
+            //   core.setFailed(error.message)
+            // })
+            // log(labelResponse)
+            const mergeResponse = yield mergePr(octokit, pullRequest, commit, sha)
+                .catch(error => {
                 log(error);
                 core.setFailed(error.message);
             });
-            log(listResponse);
-            const labelResponse = yield octokit.issues.addLabels({
-                owner: pullRequest.base.repo.owner.login,
-                repo: pullRequest.base.repo.name,
-                issue_number: pullRequest.number,
-                labels: ['MergeMe'],
-            }).catch((error) => {
-                log(error);
-                core.setFailed(error.message);
-            });
-            log(labelResponse);
-            // const { status, data } = await mergePr(octokit, pullRequest, commit, sha)
-            //     .catch(error => {
-            //         log(error)
-            //         core.setFailed(error.message)
-            //     })
-            // log(data)
-            // return status === 200
+            log(mergeResponse);
+            return; // status === 200
         }
         catch (error) {
             core.setFailed(error.message);
@@ -95,32 +95,23 @@ function run() {
     });
 }
 run();
-// async function mergePr(octokit, pullRequest, commit_title, sha) {
-//   const mergeParams = {
-//     owner: pullRequest.base.repo.owner.login,
-//     repo: pullRequest.base.repo.name,
-//     pull_number: pullRequest.number,
-//     commit_title,
-//     commit_message: "",
-//     sha,
-//     merge_method: 'squash'
-//   }
-//   const { status, data } = await octokit.pulls.merge(mergeParams)
-//   return { status, data }
-// }
+function mergePr(octokit, pullRequest, commit_title, sha) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const mergeParams = {
+            owner: pullRequest.base.repo.owner.login,
+            repo: pullRequest.base.repo.name,
+            pull_number: pullRequest.number,
+            commit_title,
+            commit_message: "",
+            sha,
+            merge_method: 'squash'
+        };
+        const { status, data } = yield octokit.pulls.merge(mergeParams);
+        return { status, data };
+    });
+}
 function log(toLog) {
     console.log(util_1.inspect(toLog, { showHidden: false, depth: null }));
-}
-function getVar(varName) {
-    const envVar = process.env[varName];
-    let returnVar = "";
-    if (envVar === undefined) {
-        core.setFailed(`${varName} is not available`);
-    }
-    else {
-        returnVar = envVar;
-    }
-    return returnVar;
 }
 function checkLabels(labels) {
     let flag = false;
