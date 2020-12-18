@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const util = require('util')
 const { Octokit } = require("@octokit/rest");
 
