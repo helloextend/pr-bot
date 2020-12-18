@@ -25,7 +25,7 @@ async function main () {
     //     return false
     // }
 
-    const response = await octokit.pulls.merge({
+    const { status, data } = await octokit.pulls.merge({
         owner: pullRequest.base.repo.owner.login,
         repo: pullRequest.base.repo.name,
         pull_number: pullRequest.number,
@@ -34,11 +34,15 @@ async function main () {
         sha,
         merge_method: 'squash'
     })
-    console.log(response)
+    console.log(util.inspect(data, {showHidden: false, depth: null}))
+    if ( status === 200 ) {
+        return true
+    } else {
+        return false
+    }
 }
 
 main()
-console.log("I'm finished!!")
 
 function check_labels(labels) {
     if (labels.length > 0) {
