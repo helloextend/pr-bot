@@ -12,21 +12,21 @@ async function main () {
         head: { sha }
     } = pullRequest;
 
-    //noop
-
     const octokit = new Octokit({
         auth: `token ${token}`,
         userAgent: '@extend/mergebot'
     });
 
     if (debug) {
+        console.log(util.inspect(context.event.pull_request, {showHidden: false, depth: null}))
         console.log(util.inspect(context.event.pull_request.labels, {showHidden: false, depth: null}))
         //console.log(util.inspect(context.event.pull_request, {showHidden: false, depth: null}))
     }
 
-    // if (!check_labels(pullRequest)) {
-    //     return false
-    // }
+    if (!check_labels(pullRequest)) {
+        console.log("No labels on PR, nothing to do...")
+        return false
+    }
 
     const { status, data } = await octokit.pulls.merge({
         owner: pullRequest.base.repo.owner.login,
