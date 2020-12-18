@@ -21,9 +21,9 @@ async function main () {
         //console.log(util.inspect(context.event.pull_request, {showHidden: false, depth: null}))
     }
 
-    if (!check_labels(pullRequest)) {
-        return false
-    }
+    // if (!check_labels(pullRequest)) {
+    //     return false
+    // }
 
     const response = await octokit.pulls.merge({
         owner: pullRequest.base.repo.owner.login,
@@ -38,6 +38,7 @@ async function main () {
 }
 
 main()
+console.log("I'm finished!!")
 
 function check_labels(labels) {
     if (labels.length > 0) {
