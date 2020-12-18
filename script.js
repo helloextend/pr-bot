@@ -32,6 +32,7 @@ async function main () {
     const { status, data } = await mergePr(octokit, pullRequest, commit, sha)
         .catch(error => {
             log(error)
+            process.exit(1)
         })
     log(data)
     return status === 200
