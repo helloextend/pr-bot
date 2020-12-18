@@ -2,6 +2,9 @@ name: 'MergeIt'
 description: 'Merge a thing'
 author: 'Extend'
 inputs:
+  token:
+    required: true
+    description: "Github Token"
   context:
     required: true
     description: 'The github context passed as toJson(github)'

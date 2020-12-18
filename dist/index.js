@@ -49,7 +49,7 @@ function run() {
                 log(context.event);
                 log(context.event.pull_request.labels);
             }
-            const token = process.env.GITHUB_TOKEN;
+            const token = core.getInput('token');
             const jiraIssue = process.env.JIRA_ISSUE;
             const pullRequest = context.event.pull_request;
             const { head: { sha } } = pullRequest;
