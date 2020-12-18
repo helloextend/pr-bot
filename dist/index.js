@@ -38,7 +38,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.checkLabels = void 0;
 const core = __importStar(__webpack_require__(186));
-const { Octokit } = __webpack_require__(375);
+const rest_1 = __webpack_require__(375);
 const util_1 = __webpack_require__(669);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -54,7 +54,7 @@ function run() {
             const pullRequest = context.event.pull_request;
             const { head: { sha } } = pullRequest;
             log('1');
-            const octokit = new Octokit()({
+            const octokit = new rest_1.Octokit({
                 auth: `token ${token}`,
                 userAgent: '@extend/mergebot'
             });
@@ -64,7 +64,7 @@ function run() {
             }
             log('2');
             const commit = `[${jiraIssue}] - ${pullRequest.title} #${pullRequest.number}`;
-            const { status: reviewsStatus, data: reviewsData } = yield octokit.pulls.listReviews({
+            const listResponse = yield octokit.pulls.listReviews({
                 owner: pullRequest.base.repo.owner.login,
                 repo: pullRequest.base.repo.name,
                 pull_number: pullRequest.number
@@ -72,8 +72,8 @@ function run() {
                 log(error);
                 core.setFailed(error.message);
             });
-            log(reviewsData);
-            const { status: labelStatus, data: labelData } = yield octokit.issues.addLabels({
+            log(listResponse);
+            const labelResponse = yield octokit.issues.addLabels({
                 owner: pullRequest.base.repo.owner.login,
                 repo: pullRequest.base.repo.name,
                 issue_number: pullRequest.number,
@@ -82,6 +82,7 @@ function run() {
                 log(error);
                 core.setFailed(error.message);
             });
+            log(labelResponse);
             // const { status, data } = await mergePr(octokit, pullRequest, commit, sha)
             //     .catch(error => {
             //         log(error)
@@ -96,6 +97,19 @@ function run() {
     });
 }
 run();
+// async function mergePr(octokit, pullRequest, commit_title, sha) {
+//   const mergeParams = {
+//     owner: pullRequest.base.repo.owner.login,
+//     repo: pullRequest.base.repo.name,
+//     pull_number: pullRequest.number,
+//     commit_title,
+//     commit_message: "",
+//     sha,
+//     merge_method: 'squash'
+//   }
+//   const { status, data } = await octokit.pulls.merge(mergeParams)
+//   return { status, data }
+// }
 function log(toLog) {
     console.log(util_1.inspect(toLog, { showHidden: false, depth: null }));
 }
