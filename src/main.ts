@@ -11,13 +11,12 @@ async function run(): Promise<void> {
       log(context.event.pull_request.labels)
     }
     const token = core.getInput('token')
-    const jiraIssue = process.env.JIRA_ISSUE
+    const jiraIssue = core.getInput('jiraIssue')
     const pullRequest = context.event.pull_request
     const {
       head: { sha }
     } = pullRequest
 
-    log('1')
     const octokit = new Octokit({
       auth: `token ${token}`,
       userAgent: '@extend/mergebot'
@@ -27,7 +26,7 @@ async function run(): Promise<void> {
         console.log("No labels on PR, nothing to do...")
         // return false
     }
-    log('2')
+
     const commit = `[${jiraIssue}] - ${pullRequest.title} #${pullRequest.number}`
 
     const listResponse = await octokit.pulls.listReviews({

@@ -12,6 +12,9 @@ inputs:
     required: false
     description: 'Add debug logs to action'
     default: 'false'
+  jiraIssue:
+    required: true
+    description: 'Jira issue to put in merge commit'
   label: # change this
     required: false
     description: 'Label Name to check'

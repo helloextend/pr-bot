@@ -50,10 +50,9 @@ function run() {
                 log(context.event.pull_request.labels);
             }
             const token = core.getInput('token');
-            const jiraIssue = process.env.JIRA_ISSUE;
+            const jiraIssue = core.getInput('jiraIssue');
             const pullRequest = context.event.pull_request;
             const { head: { sha } } = pullRequest;
-            log('1');
             const octokit = new rest_1.Octokit({
                 auth: `token ${token}`,
                 userAgent: '@extend/mergebot'
@@ -62,7 +61,6 @@ function run() {
                 console.log("No labels on PR, nothing to do...");
                 // return false
             }
-            log('2');
             const commit = `[${jiraIssue}] - ${pullRequest.title} #${pullRequest.number}`;
             const listResponse = yield octokit.pulls.listReviews({
                 owner: pullRequest.base.repo.owner.login,
