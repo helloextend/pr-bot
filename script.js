@@ -7,8 +7,11 @@ async function main () {
     const context = JSON.parse(process.env.GITHUB_CONTEXT)
     const token = process.env.GITHUB_TOKEN
     const debug = process.env.DEBUG
+    const jiraIssue = process.env.JIRA_ISSUE
     const pullRequest = context.event.pull_request
     const {
+        number: pullRequestNumber,
+        title: pullRequestTitle,
         head: { sha }
     } = pullRequest;
 
@@ -18,7 +21,6 @@ async function main () {
     });
 
     if (debug) {
-        console.log(util.inspect(context.event.pull_request, {showHidden: false, depth: null}))
         console.log(util.inspect(context.event.pull_request.labels, {showHidden: false, depth: null}))
         //console.log(util.inspect(context.event.pull_request, {showHidden: false, depth: null}))
     }
@@ -28,11 +30,12 @@ async function main () {
         return false
     }
 
+    const commit = `[${jiraIssue}] - ${pullRequestTitle} #${pullRequestNumber}`
     const { status, data } = await octokit.pulls.merge({
         owner: pullRequest.base.repo.owner.login,
         repo: pullRequest.base.repo.name,
         pull_number: pullRequest.number,
-        commit_title: "Merged via bot",
+        commit_title: commit,
         commit_message: "",
         sha,
         merge_method: 'squash'
