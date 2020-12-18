@@ -28,7 +28,6 @@ jobs:
         id: findIssue
         uses: atlassian/gajira-find-issue-key@master
         with:
-          from: branch
           string: "${{ github.head_ref }}"
       - name: Validate Jira Issue
         run: test -n "${{ steps.findIssue.outputs.issue }}"
