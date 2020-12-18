@@ -52,17 +52,15 @@ async function main () {
 main()
 
 function checkLabels(labels) {
+    let flag = false
     if (labels.length > 0) {
         labels.forEach(label => {
-            console.log(label.name)
             if (label.name === 'MergeMe') {
-                console.log('returning true')
-                return true
+                flag = true
             }
         })
     }
-    console.log('returning false')
-    return false
+    return flag
 }
 
 function parseJira(pullRequest) {
