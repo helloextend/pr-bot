@@ -12,6 +12,7 @@ async function main () {
         head: { sha }
     } = pullRequest;
 
+    //noop
 
     const octokit = new Octokit({
         auth: `token ${token}`,
