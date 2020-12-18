@@ -2,17 +2,23 @@ const util = require('util')
 const { Octokit } = require("@octokit/rest");
 
 async function main () {
+    const octokit = new Octokit()
     const context = JSON.parse(process.env.GITHUB_CONTEXT)
-
-    console.log(util.inspect(context.event.pull_request.labels, {showHidden: false, depth: null}))
-    console.log(util.inspect(context.event.pull_request, {showHidden: false, depth: null}))
-
+    const debug = process.env.DEBUG
     const pullRequest = context.event.pull_request
     const {
         head: { sha }
     } = pullRequest;
 
-    const octokit = new Octokit()
+    if (debug) {
+        console.log(util.inspect(context.event.pull_request.labels, {showHidden: false, depth: null}))
+        //console.log(util.inspect(context.event.pull_request, {showHidden: false, depth: null}))
+    }
+
+    if (!check_labels(pullRequest)) {
+        return false
+    }
+
     await octokit.pulls.merge({
         owner: pullRequest.base.repo.owner.login,
         repo: pullRequest.base.repo.name,
@@ -22,12 +28,6 @@ async function main () {
         sha,
         merge_method: 'squash'
     })
-
-    if (check_labels(context.event.pull_request.labels)) {
-        console.log('Merging!')
-    } else {
-        console.log("No labels, nothign to do...")
-    }
 }
 
 main()
