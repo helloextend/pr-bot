@@ -34,7 +34,7 @@ async function main () {
         owner: pullRequest.base.repo.owner.login,
         repo: pullRequest.base.repo.name,
         issue_number: pullRequest.number,
-        labels: 'MergeMe',
+        labels: ['MergeMe'],
     }).catch(error => {
         log(error)
         core.setFailed(error.message)
