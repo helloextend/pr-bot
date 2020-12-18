@@ -1,19 +1,10 @@
-# Tool without a name 
+# Tool Info
 
-`.github/workflows/pr.yml` is the GitHub action that will currently run on:
+This is a github action that can be used in any repo to allow merges of a PR via addition of a label and standadized the final squash merge commit message.
 
-```yaml
-  pull_request:
-    types: [labeled, unlabeled, opened, edited, reopened, sychronize, ready_for_review]
-```
+It currently requires a user to have a valid JIRA ticket in their title
 
-It calls `script.js` which will complete the merge
-
-Example JSON payload object is in `payload.json`
-
-## ToDo
-- Get testing setup and tests written
-    
+   
 ## Bonus
 - Trigger circle ci test workflow
 - Try getting this working as a consumable action from node-core. Much like `uses: helloextend/pr-bot@master`
