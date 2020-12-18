@@ -59,35 +59,20 @@ function run() {
             });
             if (!checkLabels(pullRequest.labels)) {
                 console.log("No labels on PR, nothing to do...");
-                // return false
+                process.exit(0);
             }
             const commit = `[${jiraIssue}] - ${pullRequest.title} #${pullRequest.number}`;
-            // const listResponse = await octokit.pulls.listReviews({
-            //   owner: pullRequest.base.repo.owner.login,
-            //   repo: pullRequest.base.repo.name,
-            //   pull_number: pullRequest.number
-            // }).catch((error: any) => {
-            //   log(error)
-            //   core.setFailed(error.message)
-            // })
-            // log(listResponse)
-            // const labelResponse = await octokit.issues.addLabels({
-            //   owner: pullRequest.base.repo.owner.login,
-            //   repo: pullRequest.base.repo.name,
-            //   issue_number: pullRequest.number,
-            //   labels: ['MergeMe'],
-            // }).catch((error: any) => {
-            //   log(error)
-            //   core.setFailed(error.message)
-            // })
-            // log(labelResponse)
-            const mergeResponse = yield mergePr(octokit, pullRequest, commit, sha)
+            mergePr(octokit, pullRequest, commit, sha)
+                .then(mergeResponse => {
+                if (!mergeResponse)
+                    core.setFailed('Merge response void');
+                if (debug)
+                    log(mergeResponse);
+            })
                 .catch(error => {
                 log(error);
                 core.setFailed(error.message);
             });
-            log(mergeResponse);
-            return; // status === 200
         }
         catch (error) {
             core.setFailed(error.message);
@@ -125,6 +110,26 @@ function checkLabels(labels) {
     return flag;
 }
 exports.checkLabels = checkLabels;
+// reference
+// const listResponse = await octokit.pulls.listReviews({
+//   owner: pullRequest.base.repo.owner.login,
+//   repo: pullRequest.base.repo.name,
+//   pull_number: pullRequest.number
+// }).catch((error: any) => {
+//   log(error)
+//   core.setFailed(error.message)
+// })
+// log(listResponse)
+// const labelResponse = await octokit.issues.addLabels({
+//   owner: pullRequest.base.repo.owner.login,
+//   repo: pullRequest.base.repo.name,
+//   issue_number: pullRequest.number,
+//   labels: ['MergeMe'],
+// }).catch((error: any) => {
+//   log(error)
+//   core.setFailed(error.message)
+// })
+// log(labelResponse)
 
 
 /***/ }),
