@@ -5,8 +5,12 @@ const { Octokit } = require("@octokit/rest");
 
 async function main () {
     const context = JSON.parse(process.env.GITHUB_CONTEXT)
-    const token = process.env.GITHUB_TOKEN
     const debug = process.env.DEBUG
+    if (debug) {
+        log(context.event)
+        log(context.event.pull_request.lables)
+    }
+    const token = process.env.GITHUB_TOKEN
     const jiraIssue = process.env.JIRA_ISSUE
     const pullRequest = context.event.pull_request
     const {
@@ -17,10 +21,6 @@ async function main () {
         auth: `token ${token}`,
         userAgent: '@extend/mergebot'
     })
-
-    if (debug) {
-        log(pull_request.lables)
-    }
 
     if (!checkLabels(pullRequest.labels)) {
         console.log("No labels on PR, nothing to do...")
