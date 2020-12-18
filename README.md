@@ -12,10 +12,6 @@ It calls `script.js` which will complete the merge
 Example JSON payload object is in `payload.json`
 
 ## ToDo
-- Parse out and format the jira ticket into the squash commit message. Decide how we should decide waht the commit message is.
-  - Description section?
-  - PR Title?
-  - Jira ticket info?
 - Determine what credentials are being used by the action (Currently looks like it's whoever triggered the event) 
   - Depending on who this is weshould decide how to handle the commit author(`Bot on behalf of <PR Initiator>`, Person who triggered the event, `Person who triggered the event on behalf of PR Initiator`?)
 - Do we want the bot to remove its label on failure so a user has to reapply it?
